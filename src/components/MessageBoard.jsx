@@ -1,4 +1,20 @@
+import { useState } from "react";
 function MessageBoard() {
+  const [inputText, setInputText] = useState("");
+  const [inputList, setInputList] = useState([
+    "Hello all ! This is first message.",
+  ]);
+
+  const addInputlist = (event) => {
+    event.preventDefault();
+    setInputList([...inputList, inputText]);
+    setInputText("");
+  };
+  const deleteInputList = (index) => {
+    const newInputList = [...inputList];
+    newInputList.splice(index, 1);
+    setInputList(newInputList);
+  };
   return (
     <div className="app-wrapper">
       <h1 class="app-title">Message board</h1>
@@ -9,15 +25,28 @@ function MessageBoard() {
             name="message-text"
             type="text"
             placeholder="Enter message here"
+            value={inputText}
+            onChange={(event) => {
+              setInputText(event.target.value);
+            }}
           />
         </label>
-        <button className="submit-message-button">Submit</button>
+        <button className="submit-message-button" onClick={addInputlist}>
+          Submit
+        </button>
       </div>
       <div class="board">
-        <div className="message">
-          <h1>Hello all ! This is first message.</h1>
-          <button className="delete-button">x</button>
-        </div>
+        {inputList.map((item, index) => (
+          <div className="message" key={index}>
+            <h1>{item}</h1>
+            <button
+              className="delete-button"
+              onClick={() => deleteInputList(index)}
+            >
+              x
+            </button>
+          </div>
+        ))}
       </div>
     </div>
   );
